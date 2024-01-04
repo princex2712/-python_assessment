@@ -43,6 +43,8 @@ def operation(choice):
             view_all_customer()
         case 4:
             print(total_amount())
+        case _:
+            print('Invalid Operation')
     other_operation = input('Do You want to perform another operation \'y\' for Yes and \'n\' for No: ')
     if other_operation.lower() == 'y':
         welcome()
