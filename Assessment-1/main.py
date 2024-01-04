@@ -16,7 +16,7 @@ Q - Write a program to demonstrate the bank management Console based application
 from Bank_management_console import banker,customer
 
 #Taking input from user
-print('\n\n'+'WELCOME TO PYTHON BANK MANAGEMENT SYSTEM'.center(100)+'\n\n'+'Select Your Role: ')
+print('\n\n'+'WELCOME TO PYTHON BANK MANAGEMENT SYSTEM'.center(60)+'\n\n'+'Select Your Role: ')
 print('\n'+'1)Banker'.center(60))
 print('2)Customer'.center(61)+'\n')
 print('3)Exit'.center(58))
