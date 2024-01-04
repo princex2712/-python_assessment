@@ -15,13 +15,14 @@ Q - Write a program to demonstrate the bank management Console based application
 #importing module 
 from Bank_management_console import banker,customer
 
-#Taking input from user
+#Taking input from user and printing instruction 
 print('\n\n'+'WELCOME TO PYTHON BANK MANAGEMENT SYSTEM'.center(60)+'\n\n'+'Select Your Role: ')
 print('\n'+'1)Banker'.center(60))
 print('2)Customer'.center(61)+'\n')
 print('3)Exit'.center(58))
 user_role = int(input('\n'+'Choose Your Role(1,2 or 3): '))
 
+#calling function based on input
 match user_role :
     case 1:
         banker.welcome()
