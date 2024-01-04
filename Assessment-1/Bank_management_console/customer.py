@@ -36,7 +36,11 @@ def deposite(acc_no):
         operation(2)
 
 def view_balance(acc_no):
-    return banker.customer_data[acc_no]['balance']
+    if acc_no in banker.customer_data.keys():
+        return banker.customer_data[acc_no]['balance']
+    else:
+        print('ACCOUNT NUMBER NOT FOUND RE-ENTER ACCOUNT NUMBER:')
+        operation(3)
 
 def operation(customer_choice):
     acc_no = int(input('Enter Your Account No:'))
