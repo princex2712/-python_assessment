@@ -57,13 +57,15 @@ def view_balance(acc_no):
         
 # funtion for calling method based on customers choice
 def operation(customer_choice):
-    acc_no = int(input('Enter Your Account No:'))
     match customer_choice:
         case 1:
+            acc_no = int(input('Enter Your Account No:'))
             withdraw(acc_no)
         case 2:
+            acc_no = int(input('Enter Your Account No:'))
             deposite(acc_no)
         case 3:
+            acc_no = int(input('Enter Your Account No:'))
             print(view_balance(acc_no))
         case _:
             print('Invalid Operation')
