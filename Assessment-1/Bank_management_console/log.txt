@@ -1,1 +1,0 @@
-{'Account-No': 101, 'Withdraw Amount': 2000, 'Date and Time': '04/01/2024 19:43:58'}
