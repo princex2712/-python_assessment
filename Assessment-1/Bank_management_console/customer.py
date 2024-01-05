@@ -1,9 +1,6 @@
 from . import banker # importing banker file to get users data from bank
 from datetime import datetime # importing datetime funtion to get date and time for transaction log
-
-
-# creating log list to store transaction 
-logs = []
+import os # importing os for creating and storing logs
 
 # funtion for menu and taking input from customers
 def welcome():
@@ -23,7 +20,7 @@ def withdraw(acc_no):
         else:
             banker.customer_data[acc_no]['balance'] -= withdraw_amount
             log = {'Account-No':acc_no,'Withdraw Amount':withdraw_amount,'Date and Time':datetime.now().strftime("%d/%m/%Y %H:%M:%S")}
-            logs.append(log)
+            save_logs(log)
             print('Updated Balance: ',end='')
             print(banker.customer_data[acc_no].get('balance'))
     else:
@@ -40,7 +37,7 @@ def deposite(acc_no):
         else:
             banker.customer_data[acc_no]['balance'] += deposite_amount
             log = {'Account-No':acc_no,'Deposite Amount':deposite_amount,'Date and Time':datetime.now().strftime("%d/%m/%Y %H:%M:%S")}
-            logs.append(log)
+            save_logs(log)
             print('Updated Balance: ',end='')
             print(banker.customer_data[acc_no].get('balance'))
     else:
@@ -54,7 +51,18 @@ def view_balance(acc_no):
     else:
         print('ACCOUNT NUMBER NOT FOUND RE-ENTER ACCOUNT NUMBER:')
         operation(3)
-        
+
+# function to create logs for transaction
+def save_logs(log):
+    logs_directory = 'logs-file'
+    logs_file_path = os.path.join(logs_directory,'logs.txt')
+
+    if not os.path.exists(logs_directory):
+        os.mkdir(logs_directory)
+
+    with open(logs_file_path,'a+') as file:
+        file.write(str(log)+'\n')
+
 # funtion for calling method based on customers choice
 def operation(customer_choice):
     match customer_choice:
