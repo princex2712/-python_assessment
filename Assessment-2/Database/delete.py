@@ -1,7 +1,9 @@
+# Importing Module Which Are Necessary
 from .connect_db import cursor,db_config
 from datetime import datetime
 from Database import update,database_log
 
+# Funtion to Delete User
 def delete_user(banker_no):
     acc_no = input("Enter Account Number to Delete: ")
     while not update.is_customer_valid(acc_no):

@@ -1,6 +1,7 @@
+# Importing Module Which Are Necessary
 import mysql.connector
 
-
+# Funtion to create databse
 def create_database():
     db_name = input('Enter Your Database Name: ')
     db_config = mysql.connector.connect(

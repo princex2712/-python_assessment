@@ -1,11 +1,11 @@
-# importing needed modules
+# Importing Module Which Are Necessary
 from datetime import datetime
 from .connect_db import cursor,db_config
 from Database import database_log
 from dotenv import load_dotenv
 import os
 
-# function to check account number is unique or not
+# Function to check account number is unique or not
 def is_acc_no_unq(account_no):
     cursor.execute("SELECT account_no FROM users")
     sql = cursor.fetchall()
@@ -13,7 +13,7 @@ def is_acc_no_unq(account_no):
         return False
     return True
 
-# function to check banker number is unique or not
+# Function to check banker number is unique or not
 def is_banker_no_unq(account_no):
     cursor.execute("SELECT banker_no FROM bankers")
     sql = cursor.fetchall()
@@ -21,7 +21,7 @@ def is_banker_no_unq(account_no):
         return False
     return True
 
-# insert query to insert user
+# Function to insert query to insert user
 def  insert_into_table_user():
     user_name = input('Enter Username: ')
     user_account_no = input('Enter Account Number: ')
@@ -36,8 +36,8 @@ def  insert_into_table_user():
     database_log.save_logs(log)
     db_config.commit()
     print("Created Successfully!")
-
-# insert query to insert banker
+    
+# Function to insert query to insert banker
 def  insert_into_table_banker():
     dotenv_path = os.path.join(os.path.dirname(__file__),'..','.env')
     load_dotenv(dotenv_path)

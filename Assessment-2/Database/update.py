@@ -1,6 +1,9 @@
+# Importing Module Which Are Necessary
 from .connect_db import cursor,db_config
 from Database import database_log
 from datetime import datetime
+
+# Function to check customer is valid or not
 def is_customer_valid(acc_no):
     valid_user_query = f"SELECT account_no FROM users"
     cursor.execute(valid_user_query)
@@ -9,6 +12,7 @@ def is_customer_valid(acc_no):
         return True
     return False
 
+# Function to take input for data to update
 def data_to_update(banker_no):
     choice = int(input("1)Update Name\n2)Update Phone\nEnter Your Choice: "))
     acc_no = input("Enter Account Number: ")
@@ -16,6 +20,7 @@ def data_to_update(banker_no):
         acc_no = input("Invalid Detail! Enter Valid Account Number: ")
     update_data(choice,acc_no,banker_no)
 
+# Function to update user name
 def update_name(acc_no,banker_no):
     user_name = input("Enter Updated Name: ")
     update_query = f"UPDATE users SET name='{user_name}' WHERE account_no='{acc_no}'"
@@ -24,6 +29,7 @@ def update_name(acc_no,banker_no):
     database_log.save_logs(log)
     db_config.commit()
 
+# Function to update user phone
 def update_phone(acc_no,banker_no):
     user_phone = input("Enter Updated Phone Number: ")
     update_query = f"UPDATE users SET phone='{user_phone}' WHERE account_no='{acc_no}'"
@@ -32,11 +38,12 @@ def update_phone(acc_no,banker_no):
     cursor.execute(update_query)
     db_config.commit()
 
+# Funtion to widthdraw amount
 def widthdraw(acc_no):
     balance_query = f"SELECT balance FROM users WHERE account_no={acc_no}"
     cursor.execute(balance_query)
     current_balance = cursor.fetchone()[0]
-    amount = int(input("Enter Amount to Widthdraw"))
+    amount = int(input("Enter Amount to Widthdraw: "))
     if amount > current_balance:
         print("Widthdraw amount is greater than Amount in Account Balance")
     else:
@@ -47,6 +54,7 @@ def widthdraw(acc_no):
     database_log.save_logs(log)
     db_config.commit()
 
+# Fucntion to Deposite Amount
 def deposite(acc_no):
     balance_query = f"SELECT balance FROM users WHERE account_no={acc_no}"
     cursor.execute(balance_query)
@@ -59,7 +67,7 @@ def deposite(acc_no):
     cursor.execute(update_balance_query)
     db_config.commit()
     
-
+# Calling funtion based on users choice
 def update_data(choice,acc_no,banker_no):
     match choice:     
         case 1:
