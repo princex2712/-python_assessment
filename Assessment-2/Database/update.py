@@ -54,15 +54,15 @@ def widthdraw(acc_no):
     database_log.save_logs(log)
     db_config.commit()
 
-# Fucntion to Deposite Amount
-def deposite(acc_no):
+# Fucntion to Deposit Amount
+def deposit(acc_no):
     balance_query = f"SELECT balance FROM users WHERE account_no={acc_no}"
     cursor.execute(balance_query)
     current_balance = cursor.fetchone()[0]
-    amount = int(input("Enter Amount to Deposite: "))
+    amount = int(input("Enter Amount to Deposit: "))
     current_balance += amount
     update_balance_query = f"UPDATE users SET balance ={current_balance} WHERE account_no='{acc_no}'"
-    log = {f'Account_no: {acc_no}, Operation: Deposite Amount, Amount: {amount}, Date_Time: {datetime.now().strftime("%d-%m-%Y %H:%M:%S")}'}
+    log = {f'Account_no: {acc_no}, Operation: Deposit Amount, Amount: {amount}, Date_Time: {datetime.now().strftime("%d-%m-%Y %H:%M:%S")}'}
     database_log.save_logs(log)
     cursor.execute(update_balance_query)
     db_config.commit()

@@ -1,4 +1,0 @@
-{'Banker_no: 12, Operation: Registered Banker, Date_Time: 24-01-2024 17:20:21'},
-{'Account_no: 1, Operation: Update User Name, Date_Time: 24-01-2024 17:20:56, Banker_no: 12'},
-{'Account_no: 1, Operation: Update User Phone, Date_Time: 24-01-2024 17:21:11, Banker_no: 12'},
-{'Account_no: 1, Operation: Widthdraw Amount, Amount: 11, Date_Time: 24-01-2024 17:22:57'},
