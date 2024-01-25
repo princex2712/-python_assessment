@@ -1,0 +1,8 @@
+If its first time using script you have to do following things in mysql.
+=> Create 'bank_application' database using create_db() funtion
+   Create tables for user. Table1 = 'users' and Table2 = 'bankers' using create_table() function
+
+
+=> You can do it manually from mysql commandline
+ 
+ And you are ready to go.
