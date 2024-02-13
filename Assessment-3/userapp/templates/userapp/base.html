@@ -1,0 +1,142 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %} | Healthify</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'userapp/css/bootstrap.min.css' %}">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'userapp/css/style.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Oswald', sans-serif;
+            background-color: #0f0f0f;
+        }
+
+        .navbar {
+            background-color: #000000;
+            overflow: hidden;
+            width: 100%;
+            position: fixed;
+            top: 0;
+        }
+
+        .navbar a {
+            display: inline-block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 14px;
+            text-decoration: none;
+            font-size: 17px;
+            border-radius: 7px;
+        }
+
+        .navbar a:hover {
+            background-color: #383838;
+            border-radius: 7px;
+            color: black;
+        }
+
+        .navbar-left {
+            float: left;
+        }
+
+        .navbar-right {
+            float: right;
+        }
+
+        @media screen and (max-width: 600px) {
+
+            .navbar a,
+            .navbar-right {
+                float: none;
+                display: block;
+                text-align: left;
+            }
+        }
+
+        .profile-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-info p {
+            margin: 0;
+            margin-right: 10px;
+            /* Adjust margin between name and image */
+        }
+
+        .profile-info img {
+            border-radius: 50%;
+            border: 1px solid #b5b5b5;
+            margin-left: 5px;
+            /* Adjust margin as needed */
+            width: 30px;
+            /* Set width to maintain consistency */
+            height: 30px;
+            /* Set height to maintain consistency */
+        }
+
+        .message-box {
+            margin-top: 70px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="navbar-left">
+            <a href="{% if request.session.role == 'patient' %}{% url 'patient_dashboard_view' %}
+            {% else %}{% url 'dashboard_view' %} {% endif %}">Healthify</a>
+            <a class="active" href="">Home</a>
+            <a href="#news">News</a>
+        </div>
+        <div class="navbar-right">
+            <a class="profile-link" href="{% url 'profile_view'%}">
+                <div class="profile-info">
+                    <p>{{ request.session.first_name }} {{ request.session.last_name }}</p>
+                    <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/fox.jpg"
+                        width="30" height="30"
+                        style="border-radius: 50%; border: 1px solid rgb(181, 181, 181); margin-left: 3px;">
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="message-box">
+        {% if messages %}
+
+        {% for message in messages %}
+
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+    <!-- Placeholder block for content after navbar -->
+
+    {% block content %}
+    {% endblock %}
+    <!-- Scripts -->
+    <script src="{% static 'userapp/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'userapp/js/popper.min.js' %}"></script>
+    <script src="{% static 'userapp/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'userapp/js/jquery.sticky.js' %}"></script>
+    <script src="{% static 'userapp/js/main.js' %}"></script>
+</body>
+
+</html>

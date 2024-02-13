@@ -1,0 +1,99 @@
+{% extends 'userapp/base.html' %}
+{% block title %}
+Appointment Form
+{% endblock %}
+{% block content %}
+<style>
+    /* Custom CSS styles for the appointment form */
+    .container {
+        margin-top: 100px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 20px;
+        background-color: #222;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        color: #ffffff;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url('data:image/svg+xml;utf8,<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>');
+        background-repeat: no-repeat;
+        background-position-x: 95%;
+        background-position-y: center;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    h2 {
+        font-weight: bold;
+        color: #fff;
+        margin: 20px;
+    }
+</style>
+<div class="container">
+    <h2>Appointment Form</h2>
+    <form action="{% url 'appointment_form_view' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="doctor_name">Doctor Name</label>
+            <input type="text" class="form-control" id="doctor_id" name="doctor_id"
+                value="{{ doctor_first_name }} {{ doctor_last_name }}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="full_name">First Name</label>
+            <input type="text" class="form-control" id="first_name" name="first_name" required>
+        </div>
+        <div class="form-group">
+            <label for="full_name">Last Name</label>
+            <input type="text" class="form-control" id="last_name" name="last_name" required>
+        </div>
+        <div class="form-group">
+            <label for="contact">Contact</label>
+            <input type="text" class="form-control" id="contact" name="contact" required>
+        </div>
+        <div class="form-group">
+            <label for="age">Age</label>
+            <input type="number" class="form-control" id="age" name="age" required>
+        </div>
+        <div class="form-group">
+            <label for="address">Address</label>
+            <input type="text" class="form-control" id="address" name="address" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+{% endblock %}
