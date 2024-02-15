@@ -1,135 +1,79 @@
 {% extends 'userapp/base.html' %}
 {% block title %}
-Doctor
+Appointment Form
 {% endblock %}
 {% block content %}
 <style>
-    /* Custom CSS styles specific to the patient list */
-    .patient-container {
-        margin-top: 90px;
-        padding: 20px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
+    /* Custom CSS styles for the appointment form */
+    .container {
+        margin-top: 100px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
-    .patient-card {
-        background-color: #181818;
-        color: #fff;
-        border-radius: 15px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        padding: 20px;
+    table {
+        width: 100%;
+        border-collapse: collapse;
         margin-bottom: 20px;
-        flex: 1 1 300px;
-        /* Adjust width as needed */
-        position: relative;
+        border: 1px solid #ddd;
     }
 
-    .patient-card .patient-details {
-        display: flex;
-        flex-direction: column;
+    th,
+    td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        color: #ebebeb;
     }
 
-    .patient-card img {
-        width: 100px;
-        height: auto;
-        border-radius: 50%;
-        margin-right: 20px;
+    th {
+        background-color: #222;
+        font-weight: 100;
+        color: #006de1;
     }
 
-    .patient-card h2 {
-        margin-bottom: 10px;
-    }
-
-    .patient-card p {
-        margin: 5px 0;
-    }
-
-    .action-buttons {
-        position: absolute;
-        bottom: 20px;
-        right: 20px;
-    }
-
-    .action-buttons button {
-        margin-left: 10px;
-        padding: 5px 10px;
+    .btn-primary {
+        background-color: #007bff;
+        color: #fff;
         border: none;
         border-radius: 5px;
         cursor: pointer;
+        transition: background-color 0.3s ease;
     }
 
-    .action-buttons button.update {
-        background-color: #004ddc;
-        color: white;
-    }
-
-    .action-buttons button.delete {
-        background-color: #f44336;
-        color: white;
-    }
-
-    h2 {
-        color: white;
-    }
-
-    @media screen and (max-width: 576px) {
-        .patient-card {
-            width: 100%;
-        }
+    .btn-primary:hover {
+        background-color: #0056b3;
     }
 </style>
-
-<div class="patient-container">
-    <!-- Vertical Patient Card 1 -->
-    <div class="patient-card">
-        <h2>Patient 1</h2>
-        <p>Age: 30</p>
-        <p>Gender: Male</p>
-        <p>Condition: Fever</p>
-        <div class="action-buttons">
-            <button class="update">Update</button>
-            <button class="delete">Delete</button>
-        </div>
-    </div>
-
-    <!-- Horizontal Patient Card 2 -->
-    <div class="patient-card">
-        <div class="patient-details">
-            <h2>Patient 2</h2>
-            <p>Age: 25</p>
-            <p>Gender: Female</p>
-            <p>Condition: Cough</p>
-            <div class="action-buttons">
-                <button class="update">Update</button>
-                <button class="delete">Delete</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Vertical Patient Card 3 -->
-    <div class="patient-card">
-        <h2>Patient 3</h2>
-        <p>Age: 40</p>
-        <p>Gender: Male</p>
-        <p>Condition: Diabetes</p>
-        <div class="action-buttons">
-            <button class="update">Update</button>
-            <button class="delete">Delete</button>
-        </div>
-    </div>
-
-    <!-- Vertical Patient Card 4 -->
-    <div class="patient-card">
-        <h2>Patient 4</h2>
-        <p>Age: 35</p>
-        <p>Gender: Female</p>
-        <p>Condition: Hypertension</p>
-        <div class="action-buttons">
-            <button class="update">Update</button>
-            <button class="delete">Delete</button>
-        </div>
-    </div>
-    <!-- Add more patient cards as needed -->
+<div class="container">
+    <form action="{% url 'appointment_form_view' %}" method="post">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th>Full Name</th>
+                <th>Contact</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Address</th>
+                <th>Actions</th>
+            </tr>
+            {% for patient in patients %}
+            <tr>
+                <td>{{ patient.first_name }} {{ patient.last_name }}</td>
+                <td>{{ patient.contact }}</td>
+                <td>{{ patient.age }}</td>
+                <td>{{ patient.gender }}</td>
+                <td>{{ patient.address }}</td>
+                <td>
+                    <!-- Update button -->
+                    <a href="{% url 'update_patient_view' id=patient.id %}" class="btn btn-primary">Update</a>
+                    <!-- Delete button -->
+                    <a href="{% url 'delete_patient_view' id=patient.id %}" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </form>
 </div>
 {% endblock %}

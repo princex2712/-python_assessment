@@ -12,4 +12,6 @@ urlpatterns= [
     path('logout/',logout,name='logout'),
     path('profile_view/',profile_view,name='profile_view'),
     path('appointment_form_view/',appointment_form_view,name='appointment_form_view'),
+    path('update_patient_view/<int:id>',update_patient_view,name='update_patient_view'),
+    path('delete_patient_view/<int:id>',delete_patient_view,name='delete_patient_view'),
 ]

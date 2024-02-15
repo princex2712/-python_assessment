@@ -7,7 +7,11 @@ from master.utils.HF_GENERATE.generate_otp import generate_otp
 # Create your views here.
 
 def dashboard_view(request):
-    return render(request,'userapp/dashboard.html')
+    getappointments = AppointmentModel.objects.filter(doctor_id=request.session['id'])
+    context = {
+        'patients':getappointments
+    }
+    return render(request,'userapp/dashboard.html',context)
 
 def login_view(request):
     if request.method == "POST":
@@ -147,19 +151,20 @@ def logout(request):
 def profile_view(request):
     context = {
         'first_name':request.session['first_name'],
-        'first_name':request.session['last_name'],
-        'first_name':request.session['email'],
-        'first_name':request.session['contact'],
+        'last_name':request.session['last_name'],
+        'email':request.session['email'],
+        'contact':request.session['contact'],
     }
     return render(request,'userapp/profile.html',context)
 
 def appointment_form_view(request):
     if request.method=="GET":
-        doctor_id = request.GET.get('doctor_id')
-        doctor = UserModel.objects.get(id=doctor_id) 
+        doctor_id_ = request.GET.get('doctor_id')
+        doctor = UserModel.objects.get(id=doctor_id_) 
         context = {
             'doctor_first_name': doctor.first_name,
-            'doctor_last_name': doctor.last_name
+            'doctor_last_name': doctor.last_name,
+            'select_doctor_id':doctor.id
         }
         return render(request, 'userapp/appointment_form.html', context)
     if request.method=="POST":
@@ -169,12 +174,54 @@ def appointment_form_view(request):
             contact_ = request.POST['contact']
             age_ = request.POST['age']
             address_ = request.POST['address']
+            gender_ = request.POST['gender']
+            doctor_id_ = request.POST['select_doctor_id']
+            
         except Exception as e:
             messages.error(request, f'ERROR: {str(e)}')
             return render(request,'userapp/appointment_form.html')
         else:
-            appointment = AppointmentModel(first_name=first_name_, last_name=last_name_, contact=contact_, age=age_, address=address_)
+            appointment = AppointmentModel(doctor_id=doctor_id_, first_name=first_name_, last_name=last_name_, contact=contact_, age=age_, address=address_, gender= gender_)
             appointment.save()
-            messages.success(request, f'{first_name_} {last_name_} is added.')
-            return render(request,'userapp/appointment_form.html')
-        
+            messages.success(request, f'Appointment for {first_name_} {last_name_} is added.')
+            return redirect('patient_dashboard_view')
+
+def update_patient_view(request,id):
+    getpatient = AppointmentModel.objects.get(id=id)
+    if request.method=="POST":
+        try:
+            first_name_ = request.POST['first_name']
+            last_name_ = request.POST['last_name']
+            contact_ = request.POST['contact']
+            age_ = request.POST['age']
+            gender_ = request.POST['gender']
+            address_ = request.POST['address']
+        except Exception as e:
+            messages.error(request,f"Error: {str(e)}")
+            return redirect('dashboars_view')
+        else:
+            getpatient.first_name = first_name_
+            getpatient.last_name = last_name_
+            getpatient.contact = contact_
+            getpatient.age = age_
+            getpatient.gender = gender_
+            getpatient.address = address_
+            getpatient.save()
+            messages.success(request,f"{first_name_} {last_name_} Update Successfully!")
+            return redirect('dashboard_view')
+
+    context = {
+        'first_name':getpatient.first_name,
+        'last_name':getpatient.last_name,
+        'contact':getpatient.contact,
+        'gender':getpatient.gender,
+        'address':getpatient.address,
+        'age':getpatient.age,
+    }
+    return render(request,'userapp/update_patient.html',context)
+
+def delete_patient_view(request,id):
+    getpatient = AppointmentModel.objects.get(id=id)
+    messages.success(request,f"{getpatient.first_name} {getpatient.last_name} is Deleted Successfully!")
+    getpatient.delete()
+    return redirect('dashboard_view')

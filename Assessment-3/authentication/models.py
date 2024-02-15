@@ -31,6 +31,13 @@ class AppointmentModel(BaseModel):
     age = models.IntegerField()
     address = models.CharField(max_length=255)
     status = models.BooleanField(default=True)
+    doctor_id = models.CharField(max_length=255)
+    gender_options = (
+        ('male', 'Male'),
+        ('female', 'Female'),
+        ('other', 'Other'),
+    )
+    gender = models.CharField(max_length=20,choices=gender_options)
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
