@@ -24,20 +24,29 @@ Patient
         margin-bottom: 20px;
         width: 220px;
         /* Set a fixed width for the cards */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
 
     .doctor-card h2 {
-        margin-bottom: 10px;
+        margin-bottom: 5px;
+        font-size: 1.2rem;
     }
 
     .doctor-card p {
-        margin-bottom: 15px;
+        margin-bottom: 10px;
+        font-size: 1rem;
     }
 
     .doctor-card img {
         width: 100%;
+        height: 220px;
+        /* Set a fixed height for the images */
+        object-fit: cover;
+        /* Maintain aspect ratio and crop if necessary */
         border-radius: 10px;
-        margin-bottom: 15px;
+        margin-bottom: 10px;
     }
 
     .appointment-button {
@@ -48,6 +57,9 @@ Patient
         border-radius: 5px;
         cursor: pointer;
         transition: background-color 0.3s ease;
+        align-self: center;
+        width: 150px;
+        /* Set a fixed width for the button */
     }
 
     .appointment-button:hover {
@@ -55,14 +67,15 @@ Patient
     }
 </style>
 
+
 <div class="doctor-container">
     {% for doctor in doctors %}
     <form method="GET" action="{% url 'appointment_form_view' %}">
         <input type="hidden" name="doctor_id" value="{{ doctor.id }}">
         <div class="doctor-card">
-            <img src="" alt="{{ doctor.first_name }} {{ doctor.last_name }}" />
+            <img src="{{ doctor.photo.url }}" alt="{{ doctor.first_name }} {{ doctor.last_name }}">
             <h2>{{ doctor.first_name }} {{ doctor.last_name }}</h2>
-            <p>Specialty: {{ doctor.doctor_specialty }}</p>
+            <p>Specialty: {{ doctor.doctor_speciality }}</p>
             <input type="submit" class="appointment-button" value="Book Appointment">
         </div>
     </form>

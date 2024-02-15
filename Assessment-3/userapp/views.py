@@ -2,6 +2,9 @@ from django.shortcuts import render,redirect
 from authentication.models import UserModel,AppointmentModel
 from django.contrib import messages
 
+from PIL import Image
+from io import BytesIO
+
 from master.utils.HF_GENERATE.generate_otp import generate_otp
 
 # Create your views here.
@@ -225,3 +228,31 @@ def delete_patient_view(request,id):
     messages.success(request,f"{getpatient.first_name} {getpatient.last_name} is Deleted Successfully!")
     getpatient.delete()
     return redirect('dashboard_view')
+
+def doctor_profile_view(request):
+    if request.method == "POST":
+        try:
+            first_name_ = request.POST['first_name']
+            last_name_ = request.POST['last_name']
+            email_ = request.POST['email']
+            contact_ = request.POST['contact']
+            role_ = request.POST['role']
+            speciality_ = request.POST['speciality']
+            photo_ = request.FILES['image']
+        except Exception as e:
+            print(e)
+        else:
+            # Resize the image to 300x300 pixels
+            image = Image.open(photo_)
+            image.thumbnail((300, 300))
+
+            # Save the resized image to a BytesIO object
+            image_io = BytesIO()
+            image.save(image_io, format='PNG')
+            image_io.seek(0)
+            
+            new_user = UserModel(first_name=first_name_, last_name=last_name_, email=email_, contact=contact_, role=role_, doctor_speciality=speciality_,photo = photo_ )
+            new_user.save()
+            messages.success(request,"Registered Successfully!")
+            return redirect('login_view')
+    return render(request,'userapp/doctor_profile.html')

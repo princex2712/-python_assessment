@@ -11,10 +11,10 @@ class UserModel(BaseModel):
     email = models.EmailField(max_length=255,unique=True)
     contact = models.CharField(max_length=255)
     password = models.CharField(max_length=255)
-    doctor_specialty = models.CharField(max_length=255,blank=True)
+    doctor_speciality = models.CharField(max_length=255,blank=True)
     role = models.CharField(max_length=50,default="patient")
     otp = models.CharField(max_length=50,default="457783")
-    photo = models.ImageField(blank=True)
+    photo = models.ImageField(upload_to='user_photos/',blank=True)
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'

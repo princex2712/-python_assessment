@@ -48,6 +48,7 @@
             display: flex;
             flex-direction: column;
             row-gap: 14px;
+
         }
 
         .content__inputs {
@@ -65,6 +66,17 @@
             height: 38px;
             background: rgb(250, 250, 250);
             border-radius: 3px;
+
+        }
+
+        .content__form input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            opacity: 0;
+            cursor: pointer;
         }
 
         .content__form span {
@@ -86,6 +98,7 @@
             text-overflow: ellipsis;
             font-size: 16px;
             vertical-align: middle;
+
         }
 
         .content__form input:valid+span {
@@ -191,9 +204,10 @@
     <div class="container">
         <div class="content">
             <h1>Healthify</h1>
-            <form action="{% url 'register_view' %}" method="post" class="content__form">
+            <form action="{% url 'doctor_profile_view' %}" method="post" class="content__form"
+                enctype="multipart/form-data">
                 {% csrf_token %}
-                <input type="hidden" name="role" value="patient">
+                <input type="hidden" name="role" value="doctor">
                 <div class="content__inputs">
                     <label>
                         <input required="" type="text" name="first_name">
@@ -211,6 +225,14 @@
                         <input required="" type="text" name="contact">
                         <span>Contact</span>
                     </label>
+                    <label>
+                        <input required="" type="text" name="speciality">
+                        <span>Your Speciality</span>
+                    </label>
+                    <label>
+                        <input required="" type="file" name="image" accept="image/*">
+                        <span>Add Your Photo</span>
+                    </label>
                 </div>
                 <button>Log In</button>
             </form>
@@ -222,11 +244,6 @@
             <div>
                 <a href="{% url 'login_view' %}" style="text-decoration: none; color: inherit;">
                     <button style="margin-top: 10px;">Back to Login?</button>
-                </a>
-            </div>
-            <div>
-                <a href="{% url 'doctor_profile_view' %}" style="text-decoration: none; color: inherit;">
-                    <button style="margin-top: 10px;">Register As Doctor Here!</button>
                 </a>
             </div>
         </div>
