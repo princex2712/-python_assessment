@@ -17,5 +17,6 @@ urlpatterns= [
     path('update_patient_view/<int:id>',update_patient_view,name='update_patient_view'),
     path('delete_patient_view/<int:id>',delete_patient_view,name='delete_patient_view'),
     path('doctor_profile_view/',doctor_profile_view,name='doctor_profile_view'),
+    path('appointment_status_view/',appointment_status_view,name='appointment_status_view'),
 ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

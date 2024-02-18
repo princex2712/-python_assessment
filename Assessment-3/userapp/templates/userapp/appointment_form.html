@@ -66,6 +66,7 @@ Appointment Form
 </style>
 <div class="container">
     <h2>Appointment Form</h2>
+    <p style="color: rgb(243, 67, 67);">Please make sure to provide all necessary information for your appointment.</p>
     <form action="{% url 'appointment_form_view' %}" method="post">
         {% csrf_token %}
         <input type="hidden" name="select_doctor_id" id="select_doctor_id" value="{{select_doctor_id}}">
@@ -76,15 +77,17 @@ Appointment Form
         </div>
         <div class="form-group">
             <label for="full_name">First Name</label>
-            <input type="text" class="form-control" id="first_name" name="first_name" required>
+            <input type="text" class="form-control" id="first_name" name="first_name" value="{{patient.first_name}}"
+                required>
         </div>
         <div class="form-group">
             <label for="full_name">Last Name</label>
-            <input type="text" class="form-control" id="last_name" name="last_name" required>
+            <input type="text" class="form-control" id="last_name" name="last_name" value="{{patient.last_name}}"
+                required>
         </div>
         <div class="form-group">
             <label for="contact">Contact</label>
-            <input type="text" class="form-control" id="contact" name="contact" required>
+            <input type="text" class="form-control" id="contact" name="contact" value="{{patient.contact}}" required>
         </div>
         <div class="form-group">
             <label for="age">Age</label>
@@ -100,7 +103,7 @@ Appointment Form
         </div>
         <div class="form-group">
             <label for="address">Address</label>
-            <input type="text" class="form-control" id="address" name="address" required>
+            <input type="text" class="form-control" id="address" name="address" value="{{patient.address}}" required>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>

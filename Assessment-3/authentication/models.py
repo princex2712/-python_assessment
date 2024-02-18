@@ -25,19 +25,26 @@ class UserModel(BaseModel):
        super(UserModel,self).save(*args, **kwargs)
 
 class AppointmentModel(BaseModel):
+    patient_id = models.ForeignKey(UserModel,on_delete=models.CASCADE)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     contact = models.CharField(max_length=255)
     age = models.IntegerField()
     address = models.CharField(max_length=255)
-    status = models.BooleanField(default=True)
     doctor_id = models.CharField(max_length=255)
+    notes = models.CharField(max_length=255,default='--')
     gender_options = (
         ('male', 'Male'),
         ('female', 'Female'),
         ('other', 'Other'),
     )
+    status_choices = (
+        ('active', 'Active'),
+        ('pending', 'Pending'),
+        ('completed', 'Completed'),
+    )
     gender = models.CharField(max_length=20,choices=gender_options)
+    status = models.CharField(max_length=20,choices=status_choices,default='Pending')
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'

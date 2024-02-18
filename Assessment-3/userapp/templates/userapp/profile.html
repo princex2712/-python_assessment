@@ -4,41 +4,6 @@ Profile
 {% endblock %}
 {% block content %}
 <style>
-    /* Custom CSS styles specific to the profile card */
-    .profile-card {
-        margin-top: 90px;
-        padding: 20px;
-        background-color: #181818;
-        color: #fff;
-        border-radius: 15px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        max-width: 400px;
-        margin: 0 auto;
-    }
-
-    /* Style for the logout button */
-    .logout-button-container {
-        display: flex;
-        justify-content: center;
-    }
-
-    .logout-button {
-        background-color: #ff2600;
-        /* Red color */
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    .logout-button:hover {
-        background-color: #D32F2F;
-        /* Darker red on hover */
-    }
-
-    /* Style for the h2 element */
     h2 {
         text-align: center;
         font-weight: bold;
@@ -51,11 +16,10 @@ Profile
     <p><strong>Name:</strong> {{request.session.first_name}} {{request.session.last_name}}</p>
     <p><strong>Email:</strong> {{request.session.email}}</p>
     <p><strong>Contact:</strong> {{request.session.contact}}</p>
-    <!-- Add more details as needed -->
+    <p><strong>Role:</strong> {{request.session.role}}</p>
 
-    <!-- Logout button container -->
     <div class="logout-button-container">
-        <!-- Logout button -->
+
         <form action="{% url 'logout' %}" method="post">
             {% csrf_token %}
             <button class="logout-button" type="submit">Logout</button>

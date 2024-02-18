@@ -90,6 +90,139 @@
         .message-box {
             margin-top: 70px;
         }
+
+        .doctor-container {
+            margin-top: 90px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            font-family: 'Oswald', sans-serif;
+        }
+
+        /* Styles for doctor card */
+        .doctor-card {
+            background-color: #222;
+            color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 220px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .doctor-card h2 {
+            margin-bottom: 5px;
+            font-size: 1.2rem;
+        }
+
+        .doctor-card p {
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .doctor-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        /* Styles for notes section */
+        .notes-section {
+            background-color: #222;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 250px;
+            height: 100%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .appointment-button {
+            background-color: #1a73e8;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            align-self: center;
+            width: 150px;
+            /* Set a fixed width for the button */
+        }
+
+        .appointment-button:hover {
+            background-color: #1559c1;
+        }
+
+        .appointment-status-button-container {
+            margin-top: 20px;
+            /* Adjust spacing as needed */
+            text-align: center;
+        }
+
+        .appointment-status-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #1a73e8;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .appointment-status-button:hover {
+            background-color: #1559c1;
+        }
+
+        .notes-section {
+            width: 45%;
+            /* Adjust width as needed */
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        /* Custom CSS styles specific to the profile card */
+        .profile-card {
+            margin-top: 90px;
+            padding: 20px;
+            background-color: #181818;
+            color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Style for the logout button */
+        .logout-button-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .logout-button {
+            background-color: #ff2600;
+            /* Red color */
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button:hover {
+            background-color: #D32F2F;
+            /* Darker red on hover */
+        }
     </style>
 </head>
 
@@ -98,8 +231,8 @@
         <div class="navbar-left">
             <a href="{% if request.session.role == 'patient' %}{% url 'patient_dashboard_view' %}
             {% else %}{% url 'dashboard_view' %} {% endif %}">Healthify</a>
-            <a class="active" href="">Home</a>
-            <a href="#news">News</a>
+            <a href="{% if request.session.role == 'patient' %}{% url 'patient_dashboard_view' %}
+            {% else %}{% url 'dashboard_view' %} {% endif %}" class="active" href="">Home</a>
         </div>
         <div class="navbar-right">
             <a class="profile-link" href="{% url 'profile_view'%}">
@@ -127,11 +260,8 @@
         </ul>
         {% endif %}
     </div>
-    <!-- Placeholder block for content after navbar -->
-
     {% block content %}
     {% endblock %}
-    <!-- Scripts -->
     <script src="{% static 'userapp/js/jquery-3.3.1.min.js' %}"></script>
     <script src="{% static 'userapp/js/popper.min.js' %}"></script>
     <script src="{% static 'userapp/js/bootstrap.min.js' %}"></script>

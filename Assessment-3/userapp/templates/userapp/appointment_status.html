@@ -1,0 +1,96 @@
+{% extends 'userapp/base.html' %}
+{% block title %}
+Status
+{% endblock %}
+{% block content %}
+<style>
+    /* Styles for doctor card container */
+    .doctor-container {
+        margin-top: 90px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        padding: 20px;
+        font-family: 'Oswald', sans-serif;
+    }
+
+    /* Styles for doctor card */
+    .doctor-card {
+        background-color: #222;
+        color: #fff;
+        border-radius: 15px;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        padding: 20px;
+        margin-bottom: 20px;
+        width: 220px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .doctor-card h2 {
+        margin-bottom: 5px;
+        font-size: 1.2rem;
+    }
+
+    .doctor-card p {
+        margin-bottom: 10px;
+        font-size: 1rem;
+    }
+
+    .doctor-card img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
+
+    /* Styles for notes section */
+    .notes-section {
+        background-color: #222;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 20px;
+        width: 250px;
+        height: 100%;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<div class="doctor-container">
+    {% if messages %}
+
+    {% for message in messages %}
+
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+    </ul>
+    {% endif %}
+    {% if appointment %}
+    <div class="doctor-card">
+        <div class="doctor-info">
+            <img src="{{ doctor.photo.url }}" alt="{{ doctor.first_name }} {{ doctor.last_name }}">
+            <h2>{{ doctor.first_name }} {{ doctor.last_name }}</h2>
+            <p>Specialty: {{ doctor.doctor_speciality }}</p>
+            <form method="GET" action="{% url 'appointment_form_view' %}">
+                <input type="hidden" name="doctor_id" value="{{ doctor.id }}">
+            </form>
+        </div>
+    </div>
+    <div class="notes-section">
+        <p>Your Status: {{ appointment.status }}</p>
+        <p>Notes: {{ appointment.notes }}</p>
+    </div>
+    {% else %}
+    <p>No appointments registered.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

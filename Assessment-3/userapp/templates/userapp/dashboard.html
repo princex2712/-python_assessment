@@ -1,6 +1,6 @@
 {% extends 'userapp/base.html' %}
 {% block title %}
-Appointment Form
+Doctor
 {% endblock %}
 {% block content %}
 <style>
@@ -45,10 +45,29 @@ Appointment Form
     .btn-primary:hover {
         background-color: #0056b3;
     }
+
+    .doctor-container {
+        margin-top: 10px;
+    }
 </style>
 <div class="container">
-    <form action="{% url 'appointment_form_view' %}" method="post">
+    <form action="" method="post">
         {% csrf_token %}
+        <p style="color: white;">Other Doctors on this site as Follow -</p>
+        <div class="doctor-container">
+            {% for doctor in doctors %}
+            <form method="GET" action="{% url 'appointment_form_view' %}">
+                <input type="hidden" name="doctor_id" value="{{ doctor.id }}">
+                <div class="doctor-card">
+                    <img src="{{ doctor.photo.url }}" alt="{{ doctor.first_name }} {{ doctor.last_name }}">
+                    <h2>{{ doctor.first_name }} {{ doctor.last_name }}</h2>
+                    <p>Specialty: {{ doctor.doctor_speciality }}</p>
+                    <input type="submit" class="appointment-button" value="Book Appointment">
+                </div>
+            </form>
+            {% endfor %}
+        </div>
+        <p style="color: white;">Your Patients as Follow -</p>
         <table>
             <tr>
                 <th>Full Name</th>
@@ -56,6 +75,7 @@ Appointment Form
                 <th>Age</th>
                 <th>Gender</th>
                 <th>Address</th>
+                <th>Status</th>
                 <th>Actions</th>
             </tr>
             {% for patient in patients %}
@@ -65,6 +85,7 @@ Appointment Form
                 <td>{{ patient.age }}</td>
                 <td>{{ patient.gender }}</td>
                 <td>{{ patient.address }}</td>
+                <td>{{ patient.status }}</td>
                 <td>
                     <!-- Update button -->
                     <a href="{% url 'update_patient_view' id=patient.id %}" class="btn btn-primary">Update</a>

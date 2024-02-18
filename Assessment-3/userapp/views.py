@@ -10,9 +10,11 @@ from master.utils.HF_GENERATE.generate_otp import generate_otp
 # Create your views here.
 
 def dashboard_view(request):
+    doctors = UserModel.objects.filter(role='doctor').exclude(id=request.session['id'])
     getappointments = AppointmentModel.objects.filter(doctor_id=request.session['id'])
     context = {
-        'patients':getappointments
+        'patients':getappointments,
+        'doctors':doctors
     }
     return render(request,'userapp/dashboard.html',context)
 
@@ -164,10 +166,12 @@ def appointment_form_view(request):
     if request.method=="GET":
         doctor_id_ = request.GET.get('doctor_id')
         doctor = UserModel.objects.get(id=doctor_id_) 
+        patient = UserModel.objects.get(id=request.session['id'])
         context = {
             'doctor_first_name': doctor.first_name,
             'doctor_last_name': doctor.last_name,
-            'select_doctor_id':doctor.id
+            'select_doctor_id':doctor.id,
+            'patient':patient
         }
         return render(request, 'userapp/appointment_form.html', context)
     if request.method=="POST":
@@ -179,12 +183,13 @@ def appointment_form_view(request):
             address_ = request.POST['address']
             gender_ = request.POST['gender']
             doctor_id_ = request.POST['select_doctor_id']
+            patient_id_id_ = request.session['id']
             
         except Exception as e:
             messages.error(request, f'ERROR: {str(e)}')
             return render(request,'userapp/appointment_form.html')
         else:
-            appointment = AppointmentModel(doctor_id=doctor_id_, first_name=first_name_, last_name=last_name_, contact=contact_, age=age_, address=address_, gender= gender_)
+            appointment = AppointmentModel(doctor_id=doctor_id_,patient_id_id=patient_id_id_, first_name=first_name_, last_name=last_name_, contact=contact_, age=age_, address=address_, gender= gender_)
             appointment.save()
             messages.success(request, f'Appointment for {first_name_} {last_name_} is added.')
             return redirect('patient_dashboard_view')
@@ -199,6 +204,8 @@ def update_patient_view(request,id):
             age_ = request.POST['age']
             gender_ = request.POST['gender']
             address_ = request.POST['address']
+            notes_ = request.POST['notes']
+            status_ = request.POST['status']
         except Exception as e:
             messages.error(request,f"Error: {str(e)}")
             return redirect('dashboars_view')
@@ -209,6 +216,8 @@ def update_patient_view(request,id):
             getpatient.age = age_
             getpatient.gender = gender_
             getpatient.address = address_
+            getpatient.status = status_
+            getpatient.notes = notes_
             getpatient.save()
             messages.success(request,f"{first_name_} {last_name_} Update Successfully!")
             return redirect('dashboard_view')
@@ -220,6 +229,8 @@ def update_patient_view(request,id):
         'gender':getpatient.gender,
         'address':getpatient.address,
         'age':getpatient.age,
+        'notes':getpatient.notes,
+        'status':getpatient.status
     }
     return render(request,'userapp/update_patient.html',context)
 
@@ -242,11 +253,9 @@ def doctor_profile_view(request):
         except Exception as e:
             print(e)
         else:
-            # Resize the image to 300x300 pixels
             image = Image.open(photo_)
             image.thumbnail((300, 300))
 
-            # Save the resized image to a BytesIO object
             image_io = BytesIO()
             image.save(image_io, format='PNG')
             image_io.seek(0)
@@ -256,3 +265,19 @@ def doctor_profile_view(request):
             messages.success(request,"Registered Successfully!")
             return redirect('login_view')
     return render(request,'userapp/doctor_profile.html')
+
+def appointment_status_view(request):
+    try:
+        appointment = AppointmentModel.objects.get(patient_id_id=request.session['id'])
+        doctor = UserModel.objects.get(id=appointment.doctor_id)
+        context = {
+            'appointment': appointment,
+            'doctor': doctor
+        }
+        return render(request, 'userapp/appointment_status.html', context)
+    except AppointmentModel.DoesNotExist:
+        messages.info(request, 'No appointments registered.')
+        return redirect('profile_view')
+    except UserModel.DoesNotExist:
+        messages.info(request, 'Doctor is not available')
+        return redirect('profile_view')
