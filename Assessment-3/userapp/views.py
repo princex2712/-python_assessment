@@ -7,9 +7,19 @@ from io import BytesIO
 
 from master.utils.HF_GENERATE.generate_otp import generate_otp
 
-# Create your views here.
 
 def dashboard_view(request):
+    """
+    Renders the dashboard view.
+
+    Retrieves a list of doctors and appointments for the current user.
+
+    Parameters:
+    - request (HttpRequest): The HTTP request object.
+
+    Returns:
+    - HttpResponse: Renders the dashboard template with context data.
+    """
     doctors = UserModel.objects.filter(role='doctor').exclude(id=request.session['id'])
     getappointments = AppointmentModel.objects.filter(doctor_id=request.session['id'])
     context = {
@@ -19,6 +29,18 @@ def dashboard_view(request):
     return render(request,'userapp/dashboard.html',context)
 
 def login_view(request):
+    """
+    Handles user login.
+
+    Authenticates user credentials and sets session variables upon successful login.
+    Redirects to the appropriate dashboard based on the user's role.
+
+    Parameters:
+    - request (HttpRequest): The HTTP request object.
+
+    Returns:
+    - HttpResponse: Renders the login template or redirects to the dashboard.
+    """
     if request.method == "POST":
         email_ = request.POST['email']
         password_ = request.POST['password'] 
@@ -59,6 +81,18 @@ def login_view(request):
     return render(request,'userapp/login.html')
 
 def register_view(request):
+    """
+    Renders the registration view.
+
+    Handles user registration form submission and creates a new user.
+
+    Parameters:
+    - request (HttpRequest): The HTTP request object.
+
+    Returns:
+    - HttpResponse: Renders the registration template.
+    """
+    
     if request.method == "POST":
         try:
             first_name_ = request.POST['first_name']
@@ -66,6 +100,10 @@ def register_view(request):
             email_ = request.POST['email']
             contact_ = request.POST['contact']
             role_ = request.POST['role']
+
+            if UserModel.objects.filter(email=email_).exists():
+                messages.warning(request,"Email Already taken!")
+                return redirect('register_view')
         except Exception as e:
             print(e)
         else:
@@ -76,6 +114,18 @@ def register_view(request):
     return render(request,'userapp/register.html')
 
 def forgot_password_view(request):
+    """
+    Renders the forgot password view.
+
+    Handles the submission of the forgot password form, generates and verifies OTP,
+    and allows users to reset their passwords.
+
+    Parameters:
+    - request (HttpRequest): The HTTP request object.
+
+    Returns:
+    - HttpResponse: Renders the forgot password template.
+    """
     if request.method == "POST":
         role_ = request.POST['role']
         email_ = request.POST['email']
@@ -104,6 +154,17 @@ def forgot_password_view(request):
     return render(request,'userapp/forgot_password.html')
 
 def otp_verification_view(request):
+    """
+    Renders the OTP verification view.
+
+    Handles OTP submission and verifies it to reset the user's password.
+
+    Parameters:
+    - request (HttpRequest): The HTTP request object.
+
+    Returns:
+    - HttpResponse: Renders the OTP verification template.
+    """
     if request.method == "POST":
         email_ = request.POST['email']
         otp_ = request.POST['otp']
@@ -143,6 +204,17 @@ def otp_verification_view(request):
     return render(request,'userapp/otp_verification.html')
 
 def patient_dashboard_view(request):
+    """
+    Renders the patient dashboard view.
+
+    Retrieves a list of doctors for patient appointments.
+
+    Parameters:
+    - request (HttpRequest): The HTTP request object.
+
+    Returns:
+    - HttpResponse: Renders the patient dashboard template with context data.
+    """
     doctors = UserModel.objects.filter(role='doctor')
     context = {
         'doctors':doctors
@@ -150,10 +222,32 @@ def patient_dashboard_view(request):
     return render(request,'userapp/patient_dashboard.html',context)
 
 def logout(request):
+    """
+    Logs out the user.
+
+    Clears session data and redirects to the login view.
+
+    Parameters:
+    - request (HttpRequest): The HTTP request object.
+
+    Returns:
+    - HttpResponseRedirect: Redirects to the login view.
+    """
     request.session.clear()
     return redirect('login_view') 
 
 def profile_view(request):
+    """
+    Renders the user profile view.
+
+    Retrieves and displays user profile information.
+
+    Parameters:
+    - request (HttpRequest): The HTTP request object.
+
+    Returns:
+    - HttpResponse: Renders the user profile template with context data.
+    """
     context = {
         'first_name':request.session['first_name'],
         'last_name':request.session['last_name'],
@@ -163,7 +257,22 @@ def profile_view(request):
     return render(request,'userapp/profile.html',context)
 
 def appointment_form_view(request):
+    """
+    Renders the appointment form view.
+
+    Renders the appointment form and handles form submission for appointment registration.
+
+    Parameters:
+    - request (HttpRequest): The HTTP request object.
+
+    Returns:
+    - HttpResponse: Renders the appointment form template.
+    """
     if request.method=="GET":
+        is_new_appointment = AppointmentModel.objects.filter(patient_id_id=request.session['id'])
+        if is_new_appointment:
+            messages.warning(request,"You can Register only 1 Appointment at a Time!")
+            return redirect('profile_view')
         doctor_id_ = request.GET.get('doctor_id')
         doctor = UserModel.objects.get(id=doctor_id_) 
         patient = UserModel.objects.get(id=request.session['id'])
@@ -195,6 +304,18 @@ def appointment_form_view(request):
             return redirect('patient_dashboard_view')
 
 def update_patient_view(request,id):
+    """
+    Renders the update patient view.
+
+    Renders the update patient form and handles form submission for updating patient information.
+
+    Parameters:
+    - request (HttpRequest): The HTTP request object.
+    - id (int): The ID of the patient to be updated.
+
+    Returns:
+    - HttpResponse: Renders the update patient template with context data.
+    """
     getpatient = AppointmentModel.objects.get(id=id)
     if request.method=="POST":
         try:
@@ -235,12 +356,35 @@ def update_patient_view(request,id):
     return render(request,'userapp/update_patient.html',context)
 
 def delete_patient_view(request,id):
+    """
+    Deletes a patient record.
+
+    Deletes the specified patient record and redirects to the dashboard view.
+
+    Parameters:
+    - request (HttpRequest): The HTTP request object.
+    - id (int): The ID of the patient to be deleted.
+
+    Returns:
+    - HttpResponseRedirect: Redirects to the dashboard view.
+    """
     getpatient = AppointmentModel.objects.get(id=id)
     messages.success(request,f"{getpatient.first_name} {getpatient.last_name} is Deleted Successfully!")
     getpatient.delete()
     return redirect('dashboard_view')
 
 def doctor_profile_view(request):
+    """
+    Renders the doctor profile view.
+
+    Renders the doctor profile form and handles form submission for doctor profile creation.
+
+    Parameters:
+    - request (HttpRequest): The HTTP request object.
+
+    Returns:
+    - HttpResponse: Renders the doctor profile template.
+    """
     if request.method == "POST":
         try:
             first_name_ = request.POST['first_name']
@@ -250,6 +394,9 @@ def doctor_profile_view(request):
             role_ = request.POST['role']
             speciality_ = request.POST['speciality']
             photo_ = request.FILES['image']
+            if UserModel.objects.filter(email=email_).exists():
+                messages.warning(request,"Email Already taken!")
+                return redirect('doctor_profile_view')
         except Exception as e:
             print(e)
         else:
@@ -267,6 +414,17 @@ def doctor_profile_view(request):
     return render(request,'userapp/doctor_profile.html')
 
 def appointment_status_view(request):
+    """
+    Renders the appointment status view.
+
+    Retrieves the appointment details and associated doctor for the logged-in patient.
+
+    Parameters:
+    - request (HttpRequest): The HTTP request object.
+
+    Returns:
+    - HttpResponse: Renders the appointment status template with context data.
+    """
     try:
         appointment = AppointmentModel.objects.get(patient_id_id=request.session['id'])
         doctor = UserModel.objects.get(id=appointment.doctor_id)
@@ -277,7 +435,7 @@ def appointment_status_view(request):
         return render(request, 'userapp/appointment_status.html', context)
     except AppointmentModel.DoesNotExist:
         messages.info(request, 'No appointments registered.')
-        return redirect('profile_view')
+        return redirect('patient_dashboard_view')
     except UserModel.DoesNotExist:
         messages.info(request, 'Doctor is not available')
-        return redirect('profile_view')
+        return redirect('patient_dashboard_view')
