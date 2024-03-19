@@ -67,6 +67,7 @@ Doctor
             {% endfor %}
         </div>
         <p style="color: white;">Your Patients as Follow -</p>
+        {% if patients %}
         <table>
             <tr>
                 <th>Full Name</th>
@@ -94,6 +95,9 @@ Doctor
             </tr>
             {% endfor %}
         </table>
+        {% else %}
+        <p>No patients</p>
+        {% endif %}
     </form>
 </div>
 {% endblock %}

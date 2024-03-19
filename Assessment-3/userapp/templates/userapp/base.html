@@ -231,8 +231,6 @@
         <div class="navbar-left">
             <a href="{% if request.session.role == 'patient' %}{% url 'patient_dashboard_view' %}
             {% else %}{% url 'dashboard_view' %} {% endif %}">Healthify</a>
-            <a href="{% if request.session.role == 'patient' %}{% url 'patient_dashboard_view' %}
-            {% else %}{% url 'dashboard_view' %} {% endif %}" class="active" href="">Home</a>
         </div>
         <div class="navbar-right">
             <a class="profile-link" href="{% url 'profile_view'%}">
